@@ -21,7 +21,7 @@ public abstract class Escalonador {
     
     protected List<Processo> prontos;
 
-    protected Processo corrente = null;
+    protected Processo processoAtual = null;
         
     /**
      * Tempo atual da execução do escalonador. Se o valor for -1, então ainda
@@ -170,15 +170,15 @@ public abstract class Escalonador {
      * <code>tempoEntrada</code> igual ao <code>tempoAtual</code>, esses
      * processo são removidos da lista <code>processosNaoProntos</code></li>
      * <li>Decrementa o <code>tempoExecução</code> do proceso
-     * <code>corrente</code>.</li>
+     * <code>processoAtual</code>.</li>
      * <li>Incrementa o <code>tempoEspera</code> dos processos na lista de
      * <code>prontos</code> execução.</li>
-     * <li>Quando o processo <code>corrente</code> alcança o fim da execução (
+     * <li>Quando o processo <code>processoAtual</code> alcança o fim da execução (
      * <code>tempoExecucao</code> == 0), tira-o da lista de <code>prontos</code>
      * .</li>
      * </ul>
      * 
-     * @see #corrente
+     * @see #processoAtual
      * @see #processos
      * @see #processosNaoProntos
      * @see #prontos
@@ -204,25 +204,16 @@ public abstract class Escalonador {
         Processo corrente = null;
         this.processaEntradas();
 
-        if (this.preemptivo || this.corrente == null || this.corrente
-                        .getDuracao()<= 0) {
-            // pegua o primeiro processo da lista de espera para execultar
-            this.corrente = corrente = this.prontos.get(0);
-        } else
-            // no não preemptivo se o processo ainda pode ser execultado, então
-            // ele continua até o fim
-            corrente = this.corrente;
+        corrente = this.processoAtual;
 
         corrente.passaTempo();
 
         for (Processo pronto : this.prontos) {
-            if (pronto != corrente) // para este caso esta certo o "!=" pois
-                                    // quero saber se é o mesmo objeto, não se
-                                    // possuem os mesmos valores
+            if (pronto != corrente) // Quero saber se é o mesmo objeto, não se possuem os mesmos valores.
                 pronto.incrementaEspera();
         }
 
-        if (corrente.getDuracao()<= 0) {
+        if (corrente.getDuracao() <= 0) {
             this.prontos.remove(corrente);
         }
 
@@ -230,7 +221,7 @@ public abstract class Escalonador {
     }
     
     /**
-     * Processa a lista de processos, para incluí-los a espera
+     * Processa a lista de processos para incluí-los na espera
      */
     protected void processaEntradas() {
         if (this.prontos == null)
@@ -248,7 +239,7 @@ public abstract class Escalonador {
     }
 
     /**
-     * Retorna se o escalonador chegou ao final da execução.
+     * Retorna se o escalonador chegou ao final da execução ou não.
      * 
      * @return Verdadeiro se não há processos por executar.
      */
@@ -263,7 +254,7 @@ public abstract class Escalonador {
     }
 
     /**
-     * Retorna os processos registrados no escalonador.
+     * Retorna os processos do escalonador.
      * 
      * @see #processos
      */
@@ -281,7 +272,7 @@ public abstract class Escalonador {
     }
 
     /**
-     * Retorna os processo prontos no sistema.
+     * Retorna os processos prontos no sistema.
      * 
      * @see #prontos
      */
@@ -290,22 +281,13 @@ public abstract class Escalonador {
     }
 
     /**
-     * Retorna o processo corrente.
+     * Retorna o processo Atual.
      * 
-     * @see #corrente
+     * @see #processoAtual
      */
-    public Processo getCorrente() {
-        return corrente;
+    public Processo getProcessoAtual() {
+        return processoAtual;
     }
-
-    /**
-     * Retorna se o escalonador é preemptivo.
-     * 
-     * @see #preemptivo
-     */
-//    public boolean isPreemptivo() {
-//        return preemptivo;
-//    }
 
     /**
      * Retorna qual o tempo atual do escalonador.
