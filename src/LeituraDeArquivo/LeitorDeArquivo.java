@@ -88,11 +88,9 @@ public class LeitorDeArquivo {
 
                     tempoChegada = Integer.valueOf(campos[1]);
                     duracao = Integer.valueOf(campos[2]);
-                    //prioridade = Integer.valueOf(campos[3]);
-
+                    
                     processo = new Processo(campos[0], duracao, tempoChegada);
                     processos.add(processo);
-
                 }
             }
         } finally {
