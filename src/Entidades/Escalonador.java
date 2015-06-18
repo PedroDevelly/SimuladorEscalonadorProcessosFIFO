@@ -204,7 +204,12 @@ public abstract class Escalonador {
         Processo corrente = null;
         this.processaEntradas();
 
-        corrente = this.processoAtual;
+        if (this.processoAtual == null || this.processoAtual.getDuracao()<= 0) {
+            // pega o primeiro processo da lista de espera para executar
+            this.processoAtual = corrente = this.prontos.get(0);
+        } else
+            // Se o processo ainda pode ser executado, então ele continua até o fim
+            corrente = this.processoAtual;
 
         corrente.passaTempo();
 
